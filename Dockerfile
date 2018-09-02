@@ -1,6 +1,17 @@
-FROM alpine:3.7
+FROM debian:jessie
 
-RUN apk --update add rsync=3.1.3-r0 \
-    && rm -rf /var/cache/apk/*
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends rsync && \
+  apt-get clean autoclean && \
+  apt-get autoremove -y && \
+  rm -rf /var/lib/apt/lists/*
+	
+ADD ./start /usr/local/bin/start
+ADD rsyncd.conf /etc/rsyncd.conf
+	
+ENV SOURCE=
+ENV TARGET=
+ENV SYNC_TIME=0
+ENV EXIT_AFTER_COPY=false
 
-CMD /bin/sh
+ENTRYPOINT ["/usr/local/bin/start"]

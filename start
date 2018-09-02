@@ -1,0 +1,15 @@
+#!/bin/bash
+
+while sleep $SYNC_TIME ; do
+
+	echo Copying...
+	/usr/bin/rsync -avzh $SOURCE $TARGET
+	echo Done copying...
+	
+	echo Files in target:
+	ls $TARGET
+	
+	if $EXIT_AFTER_COPY ; then
+		exit 0
+	fi
+done
